@@ -1,0 +1,17 @@
+
+build:
+  api:
+    context: api
+    dockerfile: ${OKTETO_API_DOCKERFILE:-../Dockerfile.okteto}
+    args:
+      BASE_IMAGE: okteto/movies-with-helm:api
+  frontend:
+    context: frontend
+    dockerfile: ${OKTETO_FRONTEND_DOCKERFILE:-../Dockerfile.okteto}
+    args:
+      BASE_IMAGE: okteto/movies-with-helm:frontend
+
+deploy:
+  - helm upgrade --install movies chart
+    --set api.image=${OKTETO_BUILD_API_IMAGE}
+    --set frontend.image=${OKTETO_BUILD_FRONTEND_IMAGE}  
